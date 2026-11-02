@@ -1,4 +1,3 @@
-# 28bmr.github.io
 Arch Linux Installation Guide
 
 This document outlines the steps I took to manually install Arch Linux in VMware Workstation. I used the official [Arch Linux Installation Guide](https://wiki.archlinux.org/title/Installation_guide). I also installed KDE Plasma as my DE and configured a few additional features for the assignment.
