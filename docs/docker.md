@@ -13,7 +13,7 @@ This document outlines the steps I took to install Docker and Coker Compose on a
 I used my existing Ubuntu Server VM on Proxmox (VM 335340100) named ubuntu-headless.
 
 Before installing Docker, I made a snapshot named pre-docker in the Proxmox Snapshots tab.
-![[Pasted image 20261122215752.png]]
+![Pasted image 20261122215752](images/Pasted%20image%2020261122215752.png)
 
 #### System Info
 
@@ -59,7 +59,7 @@ Run docker's test image to check installation.
 
 `docker compose version`
 Display docker version.
-![[Pasted image 20261122222245.png]]
+![Pasted image 20261122222245](images/Pasted%20image%2020261122222245.png)
 
 ### 3. Deploying Uptime Kuma
 
@@ -98,16 +98,16 @@ Downloads and starts Uptime Kuma in detached mode.
 
 `sudo docker compose ps`
 Displays container's running status and ports.
-![[Pasted image 20261122222300.png]]
+![Pasted image 20261122222300](images/Pasted%20image%2020261122222300.png)
 
 #### Configure the Application
 
 I opened Uptime Kuma in a browser using the VM's IP address and port 3001 and began configuring:
 `http://XXX.XXX.XXX.XXX:3001`
-![[Pasted image 20261122222225.png|546]]
+<img src="images/Pasted%20image%2020261122222225.png" alt="Pasted image 20261122222225" width="546">
 
 After creating an admin account, I added an HTTP(s) monitor for https://example.com to show functionality.
-![[Pasted image 20261122222447.png]]
+![Pasted image 20261122222447](images/Pasted%20image%2020261122222447.png)
 
 ### 4. Persistent Storage and Reboot Testing
 
@@ -131,9 +131,9 @@ After reconnecting through SSH, I ran:
 `cd ~/uptime-kuma`
 `sudo docker compose ps`
 Goes back into directory and checks the container restarted.
-![[Pasted image 20261122222950.png]]
+![Pasted image 20261122222950](images/Pasted%20image%2020261122222950.png)
 
-![[Pasted image 20261122223023.png]]
+![Pasted image 20261122223023](images/Pasted%20image%2020261122223023.png)
 
 ### 5. SSH Security
 
@@ -158,7 +158,7 @@ Pipes the public key generated to a new directory on the VM and applies proper p
 Connects to VM using private SSH key.
 
 I successfully connected after typing in my passphrase rather than password:
-![[Pasted image 20261122223850.png]]
+![Pasted image 20261122223850](images/Pasted%20image%2020261122223850.png)
 
 #### Disable Password Authentication
 
@@ -166,13 +166,13 @@ I successfully connected after typing in my passphrase rather than password:
 Opens SSH server config file.
 
 I changed the following line:
-![[Pasted image 20261122224020.png]]
+![Pasted image 20261122224020](images/Pasted%20image%2020261122224020.png)
 
 #### Troubleshooting
 
 After disabling password authentication in sshd_config, I was still able to log in with the password. After looking around, I found that sshd_config had an additional config file within it that contained another yes to password authentication. After changing this to no, password authentication no longer worked.
-![[Pasted image 20261122224338.png]]
-![[Pasted image 20261122224345.png]]
+![Pasted image 20261122224338](images/Pasted%20image%2020261122224338.png)
+![Pasted image 20261122224345](images/Pasted%20image%2020261122224345.png)
 
 ### 6. Firewall Configuration
 
@@ -202,7 +202,7 @@ Enables the firewall.
 
 `sudo ufw status`
 Displays firewall configuration.
-![[Pasted image 20261122224816.png]]
+![Pasted image 20261122224816](images/Pasted%20image%2020261122224816.png)
 
 ### 7. Automatic Security Updates
 
@@ -215,20 +215,20 @@ Installs unattended-upgrades package.
 
 `sudo dpkg-reconfigure unattended-upgrades`
 Runs the package config process to enable auto updates.
-![[Pasted image 20261122225139.png]]
+![Pasted image 20261122225139](images/Pasted%20image%2020261122225139.png)
 
 #### Verify Config
 
 `cat /etc/apt/apt.conf.d/20auto-upgrades`
 Displays config controlling automatic updates and unattended upgrades.
-![[Pasted image 20261122225130.png]]
+![Pasted image 20261122225130](images/Pasted%20image%2020261122225130.png)
 
 ### 8. Backup Script
 
 `cd ~/uptime-kuma`
 `nano backup.sh`
 Navigate to directory and enter backup script with nano
-![[Pasted image 20261122232012.png]]
+![Pasted image 20261122232012](images/Pasted%20image%2020261122232012.png)
 The script uses docker compose stop to prevent data from changing mid backup. The backup is timestamped and compressed with tar (containing data and compose.yaml). The application is then restarted and any backups not in the newest 7 are removed.
 
 #### Execute the backup script
@@ -241,28 +241,28 @@ Runs backup script, creating a backup (ran twice).
 
 `ls -lh backups/`
 Show backups directory.
-![[Pasted image 20261122231251.png]]
+![Pasted image 20261122231251](images/Pasted%20image%2020261122231251.png)
 
 `sudo docker compose ps`
 Verify Uptime Kuma running after backup.
-![[Pasted image 20261122233525.png]]
+![Pasted image 20261122233525](images/Pasted%20image%2020261122233525.png)
 
 Verify contents of backups.
-![[Pasted image 20261122231336.png]]
+![Pasted image 20261122231336](images/Pasted%20image%2020261122231336.png)
 
 #### Restoration Test
 
 I FIRST created a backup in proxmox of the whole VM.
-![[Pasted image 20261122233753.png]]
+![Pasted image 20261122233753](images/Pasted%20image%2020261122233753.png)
 
 I created a new test monitor in uptime kuma:
-![[Pasted image 20261122231818.png]]
+![Pasted image 20261122231818](images/Pasted%20image%2020261122231818.png)
 
 I then backed up the test data before deleting it and restoring it.
-![[Pasted image 20261122232619.png]]
+![Pasted image 20261122232619](images/Pasted%20image%2020261122232619.png)
 
 Finally, I verified that the restore test monitor was restored in uptime kuma.
-![[Pasted image 20261122232635.png]]
+![Pasted image 20261122232635](images/Pasted%20image%2020261122232635.png)
 ### Sources
 
 1. CYB 3353 Lecture: Docker (University of Tulsa, Fall '26)
